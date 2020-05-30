@@ -1,0 +1,112 @@
+/* ------------- 底部内容 -------------- */
+#footer {
+    background-color: #ececec;
+    padding: 20px 0;
+    bottom: 0px;
+}
+.footer-top {
+    margin-bottom: 28px;
+    margin-left:15%;
+    text-align: center;
+}
+.footer-nav .item {
+    float: left;
+}
+.footer-nav .item h4 {
+    color: #999;
+}
+.footer-nav .item h4,
+.footer-nav .item a {
+    line-height: 28px;
+}
+.footer-nav .item a {
+    position: relative;
+    float: left;
+    margin-right: 24px;
+}
+.footer-nav .item img {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 28px;
+    width: 140px;
+    height: 140px;
+}
+.footer-nav .item a:hover img {
+    display: block;
+}
+.footer-nav .item .new {
+    display: inline-block;
+    width: 28px;
+    height: 12px;
+    line-height: 10px;
+    margin-left: 8px;
+    margin-top: 8px;
+    text-align: center;
+    color: #fff;
+    background-color: #fd4c5d;
+    border-radius: 6px;
+}
+.footer-nav .line {
+    float: left;
+    width: 1px;
+    height: 86px;
+    margin: 0 46px 0 22px;
+    background-color: #e5e5e5;
+}
+.footer-img img {
+    width: 80px;
+    height: 80px;
+}
+.footer-middle,
+.footer-middle a {
+    color: #999;
+}
+.footer-middle .item {
+    float: left;
+    margin-right: 90px;
+}
+.footer-middle .item a,
+.footer-middle .item span {
+    line-height: 24px;
+}
+.footer-middle .item .icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    background: url(../images/footer-link.png) no-repeat;
+}
+.footer-middle .item .icon-2 {
+    background-position: -16px 0;
+}
+.footer-bottom {
+    padding-top: 20px;
+    text-align: center;
+}
+.footer-bottom img {
+    height: 50px;
+    width: 50px;
+}
+.footer-bottom p {
+    color: #999;
+    padding-top: 14px;
+}
+
+/* ------------- 返回顶部 -------------- */
+#back_top {
+    display: none;
+    position: fixed;
+    right: 0;
+    bottom: 108px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 30px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, .8);
+}
+#back_top:before {
+    margin-right: 0;
+}

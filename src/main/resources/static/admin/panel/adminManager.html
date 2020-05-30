@@ -1,0 +1,35 @@
+<div id="adminManager">
+    <h2>管理员列表</h2>
+    <table class="layui-table">
+        <tr>
+            <th>管理id</th>
+            <th>账户名</th>
+            <th>管理员角色</th>
+            <th>角色描述</th>
+        </tr>
+        <tr v-for="admin in admins">
+            <td>{{admin.m_id}}</td>
+            <td>{{admin.m_name}}</td>
+            <td>{{admin.adminRole.r_name}}</td>
+            <td>{{admin.adminRole.r_remark}}</td>
+        </tr>
+    </table>
+
+
+</div>
+<script>
+    $(function () {
+        axios({
+            method:"get",
+            url:"../../admin"
+        }).then(response=>{
+            adminManager.admins=response.data
+        })
+    })
+    var adminManager = new Vue({
+        el:"#adminManager",
+        data:{
+            admins:[]
+        }
+    })
+</script>

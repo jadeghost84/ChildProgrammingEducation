@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+
+
+    <link href='css/login-register.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/lib/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="icon" href="images/花朵.png">
+
+    <script src="js/lib/jquery-3.5.1.min.js"></script>
+    <script src="js/lib/vue.js"></script>
+    <script src="js/lib/axios.js"></script>
+    <script src="js/include.js"></script>
+    <script>
+        $('.message a').click(function(){
+            $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+        });
+    </script>
+</head>
+<body>
+<!--导航栏-->
+<header id="header"></header>
+
+
+
+<div class="register-page">
+    <div class="form">
+        <div id = "message" class="alert alert-info" v-cloak style="float:center">{{message}}</div>
+        <form class="register-form">
+            <input type="text" placeholder="用户名" v-model="u_name" required/>
+            <input type="password" placeholder="密码" v-model="u_password" required/>
+            <input type="text" placeholder="手机" v-model="phone" required/>
+            <button id="checkphonebutton" @click.prevent="getCheckCode">请求验证码</button>
+            <input id="checkphoneinput" type="text" placeholder="验证码" v-model="checkCode" required/>
+            <button id="submit" @click.prevent="create">注册</button>
+            <p class="message">已有账户？ <a href="login.html">登录</a></p>
+        </form>
+    </div>
+</div>
+
+<footer id="footer"></footer>
+<script>
+    const registerInfo = new Vue({
+        el:".form",
+        data:{
+            u_name:'',
+            u_password:'',
+            phone:'',
+            message:'您好,欢迎注册',
+            checkCode:''
+        },
+        methods:{
+            //点击发送验证码执行的方法
+            getCheckCode(){
+                if(!(/^1[3456789]\d{9}$/.test(this.phone))){
+                    $("#message").attr("class","alert alert-warning");
+                    this.message="手机号码不正确";
+                    return
+                }
+                $("#message").attr("class","alert alert-info")
+                this.message = "请注意查收信息"
+                //设置按钮不可用
+                $("#checkphonebutton").attr("disabled","disabled")
+                //设置按钮颜色为灰色
+                $("#checkphonebutton").css("background-color","#A8A8A8")
+                //设置定时器
+                let time = 60
+                let interval = setInterval(function () {
+                    $("#checkphonebutton").text(time+"秒后重试")
+                    time--
+                    //console.log(time)
+                    if(time == 0){
+                        $("#checkphonebutton").removeAttr("disabled")
+                        //让按钮重新回到原色
+                        $("#checkphonebutton").css("background-color","#43A047")
+                        $("#checkphonebutton").text("请求验证码")
+                        clearInterval(interval)
+                    }
+                }, 1000);
+                //请求后台发送手机验证码
+                axios({
+                    method: "get",
+                    url: "users/"+this.phone+"?phone="+this.phone
+                })
+            },
+
+            //点击注册按钮触发的方法
+            create(){
+                //先把注册按钮置为不可用
+                $("#submit").attr("disabled","disabled")
+                if(this.u_name.length>=10||this.u_name.length<1){
+                    $("#message").attr("class","alert alert-warning")
+                    this.message="用户名不规范"
+                    return
+                }
+                if(this.u_password.length>18||this.u_password.length<6){
+                    $("#message").attr("class","alert alert-warning")
+                    this.message="密码长度为6~18位"
+                    return
+                }
+                if(!(/^1[3456789]\d{9}$/.test(this.phone))){
+                    $("#message").attr("class","alert alert-warning");
+                    this.message="手机号码不正确";
+                    return
+                }
+                if(this.checkCode.length<4||this.checkCode.length>6){
+                    $("#message").attr("class","alert alert-warning");
+                    this.message="验证码错误";
+                    return
+                }
+                // 简单验证通过，发送申请
+                axios({
+                    method:"post",
+                    url:"users?checkCode="+this.checkCode,
+                    data:{
+                        'u_name':this.u_name,
+                        'u_password':this.u_password,
+                        'phone':this.phone
+                    }
+                }).then(response =>{
+                    if(response.data["flag"]===1){
+                        $("#message").attr("class","alert alert-success");
+                        this.message=response.data['message']+",自动跳转中..";
+                        setTimeout(function () {
+                            window.location.href = "login.html";
+                        },2000)
+                        return
+                    }
+                    //注册失败，重新可用注册按钮
+                    $("#submit").removeAttr("disabled")
+                    $("#message").attr("class","alert alert-danger")
+                    this.message=response.data['message']
+                })
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

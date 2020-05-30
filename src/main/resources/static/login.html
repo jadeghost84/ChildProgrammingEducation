@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+
+
+    <link rel="stylesheet" href="css/login-register.css">
+    <link rel="stylesheet" type="text/css" href="css/lib/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="icon" href="images/花朵.png">
+
+    <script src="js/lib/jquery-3.5.1.min.js"></script>
+    <script src="js/lib/vue.js"></script>
+    <script src="js/lib/axios.js"></script>
+    <script src="js/include.js"></script>
+    <script>
+        $('.message a').click(function(){
+            $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+        });
+    </script>
+</head>
+<body>
+<!--导航栏-->
+    <header id="header"></header>
+
+    <div class="login-page">
+        <div class="form">
+            <div id = "message" class="alert alert-info" v-cloak style="float: center">{{message}}</div>
+            <form class="login-form">
+                <input type="text" placeholder="手机" v-model="phone"/>
+                <input type="password" placeholder="密码" v-model="password"/>
+                <button id = "loginButton" @click.prevent="login" v-cloak>{{loginButtonText}}</button>
+                <p class="message">没有账户？ <a href="register.html">创建一个账户</a></p>
+            </form>
+        </div>
+    </div>
+<!--页足-->
+    <footer id="footer"></footer>
+<script>
+    const login = new Vue({
+        el:'.form',
+        data: {
+            phone:'',
+            password:'',
+            message:'您好,欢迎登录',
+            loginButtonText:"登录"
+        },
+        methods: {
+            login(){
+                if(!(/^1[3456789]\d{9}$/.test(this.phone))){
+                    this.message="手机号码格式不正确";
+                    $("#message").attr("class","alert alert-warning")
+                    return
+                }
+                if(this.password.length>=20 || this.password.length < 6){
+                    $("#message").attr("class","alert alert-warning")
+                    this.message="密码格式不正确";
+                    return
+                }
+                //先置登录按钮不可用并改变文字
+                $("#loginButton").attr("disabled","disabled")
+                this.loginButtonText="登录中,请稍后.."
+                //发送请求和数据
+                axios({
+                    method: 'post',
+                    url:'users/'+this.phone,
+                    data:{
+                        'phone':this.phone,
+                        'u_password':this.password
+                    }
+                }).then(response=> {
+                    this.message=response.data['message'];
+                    //登录成功处理
+                    if(response.data['flag'] === 1){
+                        this.message+=",自动跳转中.."
+                        //若登录成功，改变message样式为绿色
+                        $("#message").attr("class","alert alert-success");
+                        // $.cookie('u_id', response.data['u_id'], //设置cookie标识用户已登录
+                        //     {
+                        //         expires: 7,//7天
+                        //         path: '/' //所有页面均可读到此cookie
+                        //     }
+                        // );
+                        setTimeout(function () {
+                            window.location.href = "index.html";
+                        },2000)
+                        return
+                    }
+                    //登录失败处理
+                    //改变message样式为红色
+                    $("#message").attr("class","alert alert-danger")
+                    //登录按钮置为可用
+                    $("#loginButton").removeAttr("disabled")
+                    this.loginButtonText="登录"
+                    }
+                ).catch(error=>{
+                    this.message="网络繁忙，请稍后再试"
+                    //改变message样式为红色
+                    $("#message").attr("class","alert alert-danger")
+                    //登录按钮置为可用
+                    $("#loginButton").removeAttr("disabled")
+                    this.loginButtonText="登录"
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>

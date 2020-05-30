@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文章板块</title>
+
+    <link rel="stylesheet" type="text/css" href="css/lib/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/lib/layui.css">
+    <link rel="stylesheet" type="text/css" href="css/article.css"/>
+    <link rel="stylesheet" type="text/css" href="css/nav.css">
+    <link rel="stylesheet" type="text/css" href="css/footer.css">
+    <link rel="icon" href="images/花朵.png">
+
+
+    <script src="js/lib/jquery-3.5.1.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+    <script src="js/lib/layui/layui.all.js"></script>
+    <script src="js/lib/vue.js"></script>
+    <script src="js/lib/axios.js"></script>
+    <script src="js/include.js"></script>
+</head>
+<body>
+<header id="header"></header>
+
+
+
+<div id="main">
+    <div>
+        <h4 STYLE="display: inline-block">热门话题：</h4>
+        <button class="uploadArticleEnterButton" @click="uploadArticleEnter">发帖</button>
+    </div>
+    <div>
+        <div class="articleBody">
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">我的关注</li>
+                    <li>最新发布</li>
+                    <li>专栏文章</li>
+                    <li>一周最热</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+
+                    </div>
+
+
+
+
+                    <div class="layui-tab-item">
+                        <!--            <div class="articleNavbar">-->
+                        <!--                <button id="watch" class="navButton" @click.prevent="changeType($event)">我的关注</button>-->
+                        <!--                <button id="new" class="navButton" @click.prevent="changeType($event)">最新发布</button>-->
+                        <!--                <button id="special" class="navButton" @click.prevent="changeType($event)">专栏文章</button>-->
+                        <!--                <button id="weekHot" class="navButton" @click.prevent="changeType($event)">一周最热</button>-->
+                        <!--            </div>-->
+                        <div class="article" v-for="item in articlesType2" v-cloak>
+                            <div class="articleUserInfo">
+                                <img src="images/果树.SVG.png" style="width: 20px;height: 20px;border-radius: 50%;margin-right: 10px">
+                                <b @click.prevent="enterUserInfo">{{item.user.u_name}}</b>
+                                <span style="overflow: hidden">{{item.user.identification}}</span>
+                            </div>
+                            <div class="articleAbstract">
+                                <!--标题-->
+                                <p @click.prevent="enterArticle" style="float:top;font-size: 15px;font-weight: bold;margin: 0px;padding:0;cursor:pointer;">{{item.a_name}}</p>
+                                <!--图片和梗概-->
+                                <div style="height: 80px;width:80px;float: left;margin-right: 4px">
+                                    <img src="#" style="height: 100%;width: 100%">
+                                </div>
+                                {{item.a_content}}
+                            </div>
+                            <!--观看数、点赞数、收藏数-->
+                            <div class="articleInfo">
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="layui-tab-item">
+
+                    </div>
+
+
+
+
+                    <div class="layui-tab-item">
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+<!--        <div class="sideBody">-->
+<!--            <div class="defaultSideBox">-->
+
+<!--            </div>-->
+
+<!--        </div>-->
+
+    </div>
+
+
+</div>
+
+
+
+<footer id="footer"></footer>
+<script>
+    $(function () {
+        axios({
+            method:"get",
+            url:"articles?type="+2+"&key=扎瓦鲁多",
+        }).then(response=>{
+            main.articlesType2 = response.data
+        })
+    })
+
+    var main = new Vue({
+        el:"#main",
+        data:{
+            currentType:"new",
+            articlesType2:[]
+        },
+        methods:{
+            uploadArticleEnter(){
+                if($("#dataPipe").attr("isLogin")){
+                    window.location.href="publish.html"
+                    return
+                }
+                let r = confirm("您还未登录，是否前往登录？")
+                if (r === true) {
+                    window.location.href="login.html"
+                }
+            },
+            changeType(event){
+                this.currentType = $(event.currentTarget).prop("id")
+            },
+            enterArticle(){
+
+            },
+            enterUserInfo(){
+
+            }
+        }
+    })
+    layui.use('element', function(){
+        var element = layui.element;
+
+        //…
+    });
+
+</script>
+
+
+</body>
+</html>

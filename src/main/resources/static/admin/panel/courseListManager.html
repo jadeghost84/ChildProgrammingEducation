@@ -1,0 +1,37 @@
+<div id="courseListManager">
+
+    <h2>用户列表</h2>
+    <table id="courseListTable" class="layui-table"></table>
+
+
+
+
+</div>
+<script>
+    var courseListManager = new Vue({
+        el:"#courseListManager",
+        data:{
+            courses:[]
+        }
+    })
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#courseListTable'
+            ,height: 570
+            ,url: '../../courseForAdmin' //数据接口
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'c_id', title: 'id', width:90, sort: true, fixed: 'left'}
+                ,{field: 'c_name', title: '课程名', width:160}
+                ,{field: 'c_abstract', title: '摘要', width:150}
+                ,{field: 'c_t_id', title: '类型id', width:100, sort: true}
+                ,{field: 'upid', title: '上传用户id', width: 130, sort: true}
+                ,{field: 'c_date', title: '上传时间', width: 170, sort: true}
+            ]]
+        });
+
+    });
+</script>

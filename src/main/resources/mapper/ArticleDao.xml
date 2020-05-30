@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzm.dao.ArticleDao">
+
+    <resultMap id="defaultArticleInfo" type="article">
+        <id property="a_id" column="a_id"></id>
+        <result property="a_name" column="a_name"></result>
+        <result property="a_date" column="a_date"></result>
+        <result property="a_content" column="a_content"></result>
+        <result property="a_like" column="a_like"></result>
+        <result property="upid" column="upid"></result>
+        <association property="user" javaType="user">
+            <id property="u_id" column="u_id"></id>
+            <result property="identification" column="identification"></result>
+            <result property="u_name" column="u_name"></result>
+        </association>
+    </resultMap>
+
+<!--    <select id="findArticleByTopic" parameterType="java.lang.String">-->
+
+<!--    </select>-->
+
+<!--    <select id="findArticleBySpecial" >-->
+
+<!--    </select>-->
+
+    <select id="findArticleByNew" resultMap="defaultArticleInfo">
+        select a.a_id,a.a_name,a.a_date,a.a_content,a.a_like,a.upid,u.u_id,u.identification,u.u_name
+        from article a INNER JOIN user u on a.upid=u.u_id
+        order by a.a_date desc
+    </select>
+
+<!--    <select id="findArticleByAttention" >-->
+
+<!--    </select>-->
+
+    <select id="findArticleByWeekHot" resultMap="defaultArticleInfo">
+        select a.a_id,a.a_name,a.a_date,a.a_content,a.a_like,u.u_id,u.identification,u.u_name
+        from article a INNER JOIN user u on a.upid=u.u_id
+        order by a.a_like desc
+    </select>
+
+
+
+
+</mapper>

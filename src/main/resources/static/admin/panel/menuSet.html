@@ -1,0 +1,57 @@
+<div id="menuSet">
+
+
+
+    <h2 style="margin: 20px 20px">菜单管理（仅超级管理员）</h2>
+    <div>
+        <button class="layui-btn">添加</button>
+        <button class="layui-btn layui-btn-warm">修改</button>
+        <button class="layui-btn layui-btn-danger">删除</button>
+    </div>
+    <table class="layui-table">
+        <tr>
+            <th>菜单id</th>
+            <th>父菜单</th>
+            <th>菜单名</th>
+            <th>代号</th>
+        </tr>
+        <tr v-for="topMenu in topMenuList">
+            <td>{{topMenu.id}}</td>
+            <td style="color:red">一级菜单</td>
+            <td>{{topMenu.name}}</td>
+            <td>{{topMenu.url}}</td>
+        </tr>
+        <tr v-for="secondMenu in secondMenuList">
+            <td>{{secondMenu.id}}</td>
+            <td v-for="topMenu in topMenuList" v-if="topMenu.id == secondMenu.parentId">{{topMenu.name}}</td>
+            <td>{{secondMenu.name}}</td>
+            <td>{{secondMenu.url}}</td>
+        </tr>
+    </table>
+
+
+</div>
+<script>
+    $(function () {
+        //得到菜单信息
+        axios({
+            methods:"get",
+            url:"../adminMenu"
+        }).then(response=>{
+            adminManager.topMenuList = response.data.topMenuList
+            adminManager.secondMenuList = response.data.secondMenuList
+            adminManager.admin = response.data.admin
+            adminManager.role = response.data.role
+
+        })
+    })
+    var adminManager = new Vue({
+        el:"#menuSet",
+        data:{
+            topMenuList:[],
+            secondMenuList:[],
+            admin:"",
+            role:""
+        }
+    })
+</script>

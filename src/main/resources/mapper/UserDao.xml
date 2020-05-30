@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzm.dao.UserDao">
+
+
+
+<!-- 查询所有-->
+    <select id="findAll" resultType="user" >
+        select * from user
+    </select>
+<!-- 通过id找寻用户-->
+    <select id="findUserById" resultType="user">
+        select * from user where u_id = #{u_id}
+    </select>
+<!-- 创建用户（只有三条属性）-->
+    <insert id="saveUser" parameterType="user">
+        insert into user(u_name, u_password, phone) value(#{u_name},#{u_password},#{phone})
+    </insert>
+<!-- 通过账户密码查询用户，用于用户登录  -->
+    <select id="findUserByPhoneAndPassword" parameterType="String" resultType="user">
+        select * from user where phone = #{phone} and u_password = #{u_password}
+    </select>
+</mapper>

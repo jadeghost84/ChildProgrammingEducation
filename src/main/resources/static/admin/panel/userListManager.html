@@ -1,0 +1,70 @@
+<div id="userListManager" style="overflow: auto">
+
+    <h2>用户列表</h2>
+    <table id="userListTable" class="layui-table">
+<!--        <tr>-->
+<!--            <th>操作</th>-->
+<!--            <th>用户id</th>-->
+<!--            <th>用户名</th>-->
+<!--            <th>密码</th>-->
+<!--            <th>手机</th>-->
+<!--            <th>地址</th>-->
+<!--            <th>性别</th>-->
+<!--            <th>身份</th>-->
+<!--            <th>生日</th>-->
+<!--            <th>注册日期</th>-->
+<!--            <th style="width: 50px">描述</th>-->
+<!--            <th>认证</th>-->
+
+<!--        </tr>-->
+<!--        <tr id="data" v-for="user in users">-->
+<!--            <td><button class="layui-btn layui-btn-sm layui-btn-danger">删除</button></td>-->
+<!--            <td>{{user.u_id}}</td>-->
+<!--            <td>{{user.u_name}}</td>-->
+<!--            <td>{{user.u_password}}</td>-->
+<!--            <td>{{user.phone}}</td>-->
+<!--            <td>{{user.address}}</td>-->
+<!--            <td>{{user.gender}}</td>-->
+<!--            <td>{{user.identity}}</td>-->
+<!--            <td>{{user.birthday}}</td>-->
+<!--            <td>{{user.joindate}}</td>-->
+<!--            <td>{{user.description}}</td>-->
+<!--            <td>{{user.identification}}</td>-->
+<!--        </tr>-->
+    </table>
+
+
+</div>
+<script>
+    var adminManager = new Vue({
+        el:"#userListManager",
+        data:{
+            users:[]
+        }
+    })
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#userListTable'
+            ,height: 570
+            ,url: '../../usersForAdmin' //数据接口
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'u_id', title: 'id', width:90, sort: true, fixed: 'left'}
+                ,{field: 'u_name', title: '用户名', width:100, sort: true}
+                ,{field: 'u_password', title: '密码', width:60}
+                ,{field: 'phone', title: '手机', width:100}
+                ,{field: 'address', title: '地址', width: 150}
+                ,{field: 'gender', title: '性别', width: 40, sort: true}
+                ,{field: 'identity', title: '身份', width: 60, sort: true}
+                ,{field: 'birthday', title: '生日', width: 100,sort: true}
+                ,{field: 'joindate', title: '注册日期', width: 100, sort: true}
+                ,{field: 'description', title: '描述', width: 135}
+                ,{field: 'identification', title: '认证', width: 100, sort: true}
+            ]]
+        });
+
+    });
+</script>

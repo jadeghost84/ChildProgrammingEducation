@@ -1,0 +1,51 @@
+#body{
+    width: 78%;
+    margin: 0px auto;
+    height: auto;
+}
+.oneFloor{
+    background-image: url("../images/personPlaceHeader.jpg");
+    background-repeat:no-repeat;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 20px;
+    border-top: 1px solid whitesmoke;
+}
+.userInfo{
+    width: 100%;
+    margin-top:190px;
+    height: 40%;
+    padding-top: 12px;
+    background-image: linear-gradient(to bottom, rgba(255, 0, 0, 0), rgb(0, 0, 0));
+    /*background-image: linear-gradient(rgba(255,255,255,0),rgba(255,255,255,1));*/
+}
+.headImg{
+    height: 80px;
+    width: 80px;
+    float: left;
+    margin-left: 5px;
+}
+.userName{
+    margin-left: 8px;
+    display: inline-block;
+    font-size: 35px;
+    color: whitesmoke;
+    margin-top:0px;
+    margin-bottom: 0px;
+}
+.description{
+    display: inline-block;
+    width: 100%;
+    height: 30px;
+    padding-left: 8px;
+    border-radius: 6px;
+    background-color: #13E8E9;
+}
+.description:hover{
+    background-color: whitesmoke;
+}
+
+.myPanel{
+    width: 100%;
+    margin-bottom: auto;
+}

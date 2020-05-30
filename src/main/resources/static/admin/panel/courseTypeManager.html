@@ -1,0 +1,41 @@
+<div id="courseTypeManager">
+
+
+
+    <h2 style="margin: 20px 20px">课程类型管理</h2>
+    <div>
+        <button class="layui-btn">添加</button>
+        <button class="layui-btn layui-btn-warm">修改</button>
+        <button class="layui-btn layui-btn-danger">删除</button>
+    </div>
+    <table class="layui-table">
+        <tr>
+            <th>类型id</th>
+            <th>类型名</th>
+        </tr>
+        <tr v-for="type in courseTypes">
+            <td>{{type.c_t_id}}</td>
+            <td>{{type.c_t_name}}</td>
+        </tr>
+    </table>
+
+
+</div>
+<script>
+    $(function () {
+        //得到菜单信息
+        axios({
+            methods:"get",
+            url:"../courseTypes"
+        }).then(response=>{
+            courseTypeManager.courseTypes = response.data
+
+        })
+    })
+    var courseTypeManager = new Vue({
+        el:"#courseTypeManager",
+        data:{
+            courseTypes:[]
+        }
+    })
+</script>

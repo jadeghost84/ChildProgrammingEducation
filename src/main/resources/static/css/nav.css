@@ -1,0 +1,24 @@
+.headPortrait{
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-block;
+    padding: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 5px;
+    border: 1px solid #C0C0C0;
+}
+[v-cloak] {
+    display: none;
+}
+.navbar {
+    *position: relative;
+    *z-index: 2;
+    margin-bottom: 0px;
+    overflow: visible;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}

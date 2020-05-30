@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>课程中心</title>
+
+    <link rel="stylesheet" type="text/css" href="css/lib/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/course.css"/>
+    <link rel="stylesheet" type="text/css" href="css/nav.css">
+    <link rel="stylesheet" type="text/css" href="css/footer.css">
+    <link rel="icon" href="images/花朵.png">
+
+
+    <script src="js/lib/jquery-3.5.1.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+    <script src="js/lib/vue.js"></script>
+    <script src="js/lib/axios.js"></script>
+    <script src="js/course.js"></script>
+    <script src="js/include.js"></script>
+
+</head>
+    <header id="header"></header>
+
+
+    <!--轮播图-->
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="margin-top: 60px">
+        <!-- 下面的小按钮 -->
+        <ol class="carousel-indicators">
+            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+            <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+        </ol>
+
+        <!-- 图片墙 -->
+        <div class="carousel-inner" role="listbox">
+            <div class="item active" >
+                <img src="images/timg1.jpg" alt="..." style="margin: auto">
+                <div class="carousel-caption">
+                    ...
+                </div>
+            </div>
+            <div class="item">
+                <img src="images/timg2.jpg" alt="..." style="margin: auto">
+                <div class="carousel-caption">
+                    ...
+                </div>
+            </div>
+            <div class="item">
+                <img src="images/timg3.jpg" alt="..." style="margin: auto">
+                <div class="carousel-caption">
+                    ...
+                </div>
+            </div>
+            <div class="item">
+                <img src="images/timg4.jpg" alt="..." style="margin: auto">
+                <div class="carousel-caption">
+                    ...
+                </div>
+            </div>
+        </div>
+
+        <!-- 左右按钮 -->
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+<div class="main" id = "main">
+<!--  课程导航  -->
+    <div class="header-nav">
+        <div class="nav-wrap auto-width clearfix">
+            <a id="0" href="#" class="nav-item nav-cur" @click.prevent="selectNav">首页</a>
+            <a :id = "item['c_t_id']"  :key="item['c_t_id']" v-for="item in courseType" href="#" class="nav-item nav-item_hover" @click.prevent="selectNav">
+                {{item['c_t_name']}}
+            </a>
+            <a href="#" class="nav-rank">
+                <span class="glyphicon glyphicon-signal" aria-hidden="true"></span>
+                热度排行榜
+            </a>
+        </div>
+    </div>
+<!-- 分类陈列-->
+
+    <div class = "type-block">
+        <h4><b>推荐</b></h4>
+        <div class="row">
+            <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                    <img src="images/467525236768.jpg" alt="预览图">
+                </a>
+                <div style="text-align: center">
+                    推荐1
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                    <img src="images/467525236768.jpg" alt="预览图">
+                </a>
+                <div style="text-align: center">
+                    推荐2
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                    <img src="images/467525236768.jpg" alt="预览图">
+                </a>
+                <div style="text-align: center">
+                    推荐3
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3">
+                <a href="#" class="thumbnail">
+                    <img src="images/467525236768.jpg" alt="预览图">
+                </a>
+                <div style="text-align: center">
+                    推荐4
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 大分类,courseType是对象数组，type是对象，有c_t_id和c_t_name两个属性-->
+    <div :key="type['c_t_id']" v-for="type in courseType" class = "type-block" >
+
+        <div class="bigCourseTypeTitle">
+            <span v-cloak class="bigCourseTitle">
+                <b>
+                    {{type.c_t_name}}
+                </b>
+            </span>
+            <a href="#" class="toAllCourse">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                全部
+            </a>
+        </div>
+
+        <!--遍历course对象数组的数组-->
+        <div class="row" v-for="courses in coursesList" v-if="courses.length>0 && type.c_t_id==courses[0].c_t_id">
+            <!--遍历四个推荐course-->
+            <div :key="course.c_id" class="col-xs-6 col-md-3" v-for="course in courses">
+                <a href="#" class="thumbnail" @click.prevent="enterCourse(course.c_id)">
+                    <img src="images/105426_8844.jpg" alt="预览图">
+                </a>
+                <div style="text-align: center">
+                    {{course.c_name}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<footer id="footer"></footer>
+
+
+<!--脚本代码-->
+<script>
+    $(function () {
+        //请求课程分类
+        axios({
+            method:"get",
+            url:"courseTypes",
+        }).then(response=>{
+            app.courseType = response.data
+            //根据课程类型id请求推荐四个课程,需要得到分类才能知道id，所有放在then里
+            $.each(response.data,function (i,object) {
+                axios({
+                    method:"get",
+                    url:"courseTypes/"+object.c_t_id
+                }).then(subRespose => {
+                    app.coursesList.push(subRespose.data)
+                })
+            })
+        })
+
+    })
+
+    const app = new Vue({
+        el:"#main",
+        data:{
+            navType:0,
+            courseType:[],
+            coursesList:[]
+        },
+        methods:{
+            selectNav(event){
+                var current = $(event.currentTarget)
+                $("#"+this.navType).removeClass("nav-cur")
+                current.addClass("nav-cur")
+                this.navType = current.attr("id")
+            },
+            enterCourse(c_id){
+                window.open('coursePlay.html?c_id='+c_id)
+            }
+        }
+    })
+</script>
+</body>
+</html>

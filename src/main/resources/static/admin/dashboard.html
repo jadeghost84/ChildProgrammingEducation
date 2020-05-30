@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理主页</title>
+
+    <link rel="stylesheet" href="../js/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="../js/lib/bootstrap.min.js">
+    <link rel="stylesheet" href="../css/admin/panel.css">
+    <link rel="icon" href="../images/花朵.png">
+
+
+    <script type="text/javascript" src="../js/lib/jquery-3.5.1.min.js"></script>
+    <script src="../js/lib/vue.js"></script>
+    <script src="../js/lib/axios.js"></script>
+
+</head>
+<body class="layui-layout-body">
+<div id="main" class="layui-layout layui-layout-admin" v-cloak>
+    <div class="layui-header">
+        <div class="layui-logo">少儿编程系统后台</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="../images/headImg/headImg1.jpg" class="layui-nav-img">
+                    {{admin.m_name}}
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item" style="cursor: pointer"><a @click.prevent="logout">注销</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+
+                <li v-for="topMenu in topMenuList" class="layui-nav-item">
+                    <a class="" href="javascript:;">{{topMenu.name}}</a>
+                    <dl class="layui-nav-child">
+                        <dd :key="secondMenu.id" v-for="secondMenu in secondMenuList" v-if="secondMenu.parentId == topMenu.id"><a href="javascript:;" @click.prevent="selectMenu(secondMenu.url)">{{secondMenu.name }}</a></dd>
+                    </dl>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+
+
+            <div id="panelSelect"></div>
+
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<script src="../js/lib/layui/layui.all.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+
+
+    $(function(){
+        //得到菜单信息
+        axios({
+            methods:"get",
+            url:"../adminMenu"
+        }).then(response=>{
+            main.topMenuList = response.data.topMenuList
+            main.secondMenuList = response.data.secondMenuList
+            main.admin = response.data.admin
+            main.role = response.data.role
+
+        })
+    })
+
+    var main = new Vue({
+        el:"#main",
+        data:{
+            admin:"",
+            role:"",
+
+            topMenuList:[],
+            secondMenuList:[],
+
+            currentMenuUrl:""
+        },
+        methods:{
+            selectMenu(url){
+                this.currentMenuUrl=url
+            },
+            logout(){
+                axios({
+                    method:"delete",
+                    url:"../admin"
+                })
+                window.location.href="login.html"
+            }
+        },
+        mounted(){
+            $.get("welcome.html",function (data) {
+                $("#panelSelect").append(data)
+            });
+        },
+        watch:{
+            //topMenuList改变dom结构再重新渲染layui
+            topMenuList:function (newVal,oldVal) {
+                this.$nextTick(function () {
+                    layui.element.render()
+                })
+            },
+            currentMenuUrl:function (newVal,oldVal) {
+
+                //第一次添加panel
+                if(oldVal===""){
+                    $("#welcome").attr("hidden","hidden")
+                    $.get("panel/"+newVal+".html",function (data) {
+                        $("#panelSelect").append(data)
+                    });
+                    return;
+                }
+                //切换panel
+                $("#"+oldVal).attr("hidden","hidden")
+                if($("#"+newVal).length>0){
+                    $("#"+newVal).removeAttr("hidden")
+                }else{
+                    $.get("panel/"+newVal+".html",function (data) {
+                        $("#panelSelect").append(data)
+                    });
+                }
+
+            }
+        }
+    })
+
+</script>
+
+</body>
+</html>

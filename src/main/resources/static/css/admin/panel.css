@@ -1,0 +1,8 @@
+td{
+    white-space: nowrap;/*控制单行显示*/
+    overflow: hidden;/*超出隐藏*/
+    text-overflow: ellipsis;/*隐藏的字符用省略号表示*/
+}
+[v-cloak]{
+    display: none;
+}

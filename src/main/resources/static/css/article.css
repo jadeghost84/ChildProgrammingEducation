@@ -1,0 +1,117 @@
+a {
+    text-decoration: none;
+}
+/*正常的未被访问过的链接*/
+a:link {
+    text-decoration: none;
+}
+/*已经访问过的链接*/
+a:visited {
+    text-decoration: none;
+}
+/*鼠标划过(停留)的链接*/
+a:hover {
+    text-decoration: none;
+}
+/* 正在点击的链接，鼠标在元素上按下还没有松开*/
+a:active {
+    text-decoration: none;
+}
+/* 获得焦点的时候 鼠标松开时显示的颜色*/
+a:focus {
+    text-decoration: none;
+}
+
+body{
+    background-color:lightgrey;
+}
+li{
+    list-style-type:none;
+}
+#main{
+    width: 80%;
+    height: auto;
+    margin: 70px auto;
+}
+
+
+.uploadArticleEnterButton{
+    display: inline-block;
+    padding: 10px;
+    margin-top: 20px;
+    width: 80px;
+    float: right;
+    text-align: center;
+    background-color: pink;
+    border:2px solid black;
+    border-radius: 5%;
+    color: black;
+    cursor: pointer;
+}
+.uploadArticleEnterButton:hover{
+    background-color: red;
+}
+
+.articleBody{
+    width: 70%;
+    display: inline-block;
+}
+.articleNavbar{
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    background-color: whitesmoke;
+    margin-bottom: 8px;
+}
+.navButton{
+    font-size: medium;
+    display: inline-block;
+    margin: 5px 20px;
+    border-left-style: none;
+    border-right-style: none;
+    border-top-style: none;
+    border-bottom-style: none;
+    outline:none;
+    background-color: whitesmoke;
+}
+.navButtonSelected{
+    border-bottom: 3px solid hotpink;
+}
+
+.article{
+    width: 100%;
+    height: 180px;
+    background-color: whitesmoke;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.articleUserInfo{
+    width: 100%;
+    height: 30px;
+    font: bold;
+    margin: 0px 10px;
+}
+.articleAbstract{
+    width: 100%;
+    height: 100px;
+    overflow:hidden;
+    white-space: pre-line;
+    word-break: keep-all;
+    text-overflow: ellipsis;
+    margin: 0px 10px;
+}
+.articleInfo{
+    margin: 0px 10px;
+}
+
+.sideBody{
+    width:25%;
+    float: right;
+}
+.defaultSideBox{
+    background-color: whitesmoke;
+    width: 100%;
+    height: 220px;
+    margin-bottom: 8px;
+}

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <title>后台管理员登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <script src="../js/lib/jquery-3.5.1.min.js"></script>
+    <script src="../js/lib/vue.js"></script>
+    <script src="../js/lib/axios.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../css/admin/login.css">
+    <link rel="icon" href="../images/花朵.png">
+
+</head>
+<body>
+
+
+
+<div id="particles-js">
+    <div class="login" style="display:block;">
+        <div class="login-top">
+            后台登录
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-img">
+                <img alt="" src="../images/admin/name.png">
+            </div>
+            <div class="login-center-input">
+                <input type="text" v-model="username" id="username" value="" placeholder="请输入您的用户名" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的用户名'">
+                <div class="login-center-input-text">用户名</div>
+            </div>
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-img"><img alt="" src="../images/admin/password.png"></div>
+            <div class="login-center-input">
+                <input type="password" v-model="password" id="password" value="" placeholder="请输入您的密码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入您的密码'">
+                <div class="login-center-input-text">密码</div>
+            </div>
+        </div>
+        <div class="login-center clearfix">
+            <div class="login-center-img"><img alt="" src="../images/admin/cpacha.png"></div>
+            <div class="login-center-input">
+                <input style="width:50%;" type="text" v-model="cpacha" id="cpacha" value="" placeholder="请输入验证码" onfocus="this.placeholder=''" onblur="this.placeholder='请输入验证码'">
+                <div class="login-center-input-text">验证码</div>
+                <img alt="" id="cpacha-img" title="点击切换验证码" style="cursor:pointer;" src="../get_cpacha?vl=4&w=150&h=40&type=loginCpacha" width="110px" height="30px" @click="changeCpacha">
+            </div>
+        </div>
+        <div class="login-button" @click="login">
+            登录
+        </div>
+    </div>
+    <div class="sk-rotating-plane"></div>
+    <canvas class="particles-js-canvas-el" width="1147" height="952" style="width: 100%; height: 100%;"></canvas></div>
+
+
+<script>
+
+    var main = new Vue({
+        el:"#particles-js",
+        data:{
+            username:"",
+            password:"",
+            cpacha:""
+        },
+        methods:{
+            login(){
+                var cpacha = $("#cpacha").val();
+                if(this.username == '' || this.username == 'undefined'){
+                    alert("请填写用户名！");
+                    return;
+                }
+                if(this.password == '' || this.password == 'undefined'){
+                    alert("请填写密码！");
+                    return;
+                }
+                if(this.pacha == '' || this.cpacha == 'undefined'){
+                    alert("请填写验证码！");
+                    return;
+                }
+                this.addClass($('.login'), "active")
+                this.addClass($('.sk-rotating-plane'), "active")
+                $('.login').css('display','none');
+                axios({
+                    method:"post",
+                    url:'../admin?cpacha='+this.cpacha,
+                    data: {
+                        m_name: this.username,
+                        m_password: this.password
+                    }
+                    }).then(response=>{
+                    if(response.data.type == 'success'){
+                        window.location.href = 'dashboard.html';
+                    }else{
+                        this.removeClass($(".login"), "active");
+                        this.removeClass($(".sk-rotating-plane"), "active");
+                        $(".login").css('display',"block")
+                        alert(response.data.msg);
+                        this.changeCpacha();
+                    }
+                })
+            },
+            hasClass(elem, cls) {
+                cls = cls || '';
+                if (cls.replace(/\s/g, '').length == 0) return false; //当cls没有参数时，返回false
+                return new RegExp(' ' + cls + ' ').test(' ' + elem.className + ' ');
+            },
+            addClass(ele, cls) {
+                if (!this.hasClass(ele, cls)) {
+                    ele.className = ele.className == '' ? cls : ele.className + ' ' + cls;
+                }
+            },
+            removeClass(ele, cls) {
+                if (this.hasClass(ele, cls)) {
+                    var newClass = ' ' + ele.className.replace(/[\t\r\n]/g, '') + ' ';
+                    while (newClass.indexOf(' ' + cls + ' ') >= 0) {
+                        newClass = newClass.replace(' ' + cls + ' ', ' ');
+                    }
+                    ele.className = newClass.replace(/^\s+|\s+$/g, '');
+                }
+            },
+            changeCpacha(){
+                $("#cpacha-img").prop("src",'../get_cpacha?vl=4&w=150&h=40&type=loginCpacha&t=' + new Date().getTime());
+            }
+        }
+    })
+
+</script>
+<script src="../js/admin/particles.min.js"></script>
+<script src="../js/admin/login.js"></script>
+</body>
+</html>

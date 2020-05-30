@@ -1,0 +1,136 @@
+<!--导航栏-->
+<nav id = "navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!--Brand icon -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">
+                <img alt="Brand" src="images/花朵.png" style="height: 100%;width:auto"/>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="course.html">课程中心</a>
+                </li>
+                <li>
+                    <a href="exercise.html">题海练习</a>
+                </li>
+                <li>
+                    <a href="#">编程竞赛</a>
+                </li>
+                <li>
+                    <a href="article.html">知识论坛</a>
+                </li>
+            </ul>
+            <!-- 导航搜索表单 -->
+            <form class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" class="form-control" :placeholder='mostHot'/>
+                </div>
+                <button class="btn btn-default">搜索</button>
+            </form>
+            <!-- 注册登录头像等功能 -->
+            <!--通过isLogin判断导航栏的组件 -->
+            <div v-if="isLogin">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="personPlace.html">我的学习空间</a>
+                    </li>
+                    <li>
+                        <a href="#">消息<span class="badge" style="background-color:red ">4</span></a>
+                    </li>
+                    <li>
+                        <a href="#">动态</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">
+                            <img alt="headPortrait" :src="['images/headImg/'+headImgName]" class="headPortrait"/>
+                            <b>{{u_name}}</b>
+                        </a>
+                        <ul class="dropdown-menu dropdown-content" aria-labelledby="dropdownMenu1">
+                            <li><a href="#">主页</a></li>
+                            <li><a href="upload.html">投稿</a></li>
+                            <li><a href="#">设置</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#" @click.prevent="exitLogin">退出登录</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!--未登录显示组件-->
+            <div v-else id="noLoginComponent">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="register.html">注册</a>
+                    </li>
+                    <li>
+                        <a href="login.html">登录</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="login.html" class="dropdown-toggle" >
+                            <img alt="headPortrait" src="images/headImg/headPortrait.jpg" class="headPortrait"/>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+    <span id="dataPipe" hidden :isLogin="isLogin" :u_name="u_name"></span>
+</nav>
+<!--用做数据传递给其他root-->
+
+<script>
+
+    //通过判断是否已登录并根据获得的数据确定布局
+    $(document).ready(function () {
+        //先隐藏条件判断的初始方，得到返回数据再显示，避免渲染闪动
+        $('#noLoginComponent').prop("hide","hide")
+        axios({
+            method:"get",
+            url:"/navbar",
+            data:{}
+        }).then(response => {
+            //已登录
+            if(response.data['flag'] === 1) {
+                navbarVm.isLogin = true
+                navbarVm.u_name = response.data['u_name']
+                navbarVm.headImgName = response.data['headImgName']
+            }
+            $('#noLoginComponent').removeProp("hide")
+        })
+    })
+    //导航条vue实例
+    const navbarVm = new Vue({
+        el: "#navbar",
+        data: {
+            mostHot: 'python',
+            isLogin: false,
+            u_name:"",
+            headImgName:"headPortrait.jpg"
+        },
+        methods:{
+            exitLogin(){
+                axios({
+                    method:"delete",
+                    url:"users"
+                }).then(response=>{
+                    window.location.href = "index.html";
+                })
+            }
+        }
+    });
+
+
+
+
+
+</script>

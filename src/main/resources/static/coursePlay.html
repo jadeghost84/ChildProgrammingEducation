@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loading..</title>
+    <link rel="stylesheet" type="text/css" href="css/lib/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/lib/video-js.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/coursePlay.css">
+    <link rel="stylesheet" type="text/css" href="css/nav.css">
+    <link rel="stylesheet" type="text/css" href="css/footer.css">
+    <link rel="icon" href="images/花朵.png">
+
+
+
+    <script src="js/lib/jquery-3.5.1.min.js"></script>
+    <script src="js/lib/vue.js"></script>
+    <script src="js/lib/axios.js"></script>
+    <script src="js/lib/video.min.js"></script>
+    <script src="js/include.js"></script>
+</head>
+<body>
+<header id="header"></header>
+<div id = "main">
+
+    <div class="oneFloor">
+        <!--标题和时间-->
+        <div class="headerAndTime">
+            <h3 style="height: 26px">{{courseName}}</h3>
+            <h6>{{courseDate}}</h6>
+        </div>
+
+
+        <!--作者信息-->
+        <div class="authInfo" v-cloak>
+            <img class="headPortrait" src="images/headImg/headImg.jpg">
+            {{courseAuth}}
+            <div :title="courseAuthDescription" class="courseAuthDescription">
+                <div style="white-space:nowrap;overflow:hidden;word-break:keep-all;text-overflow:ellipsis;">
+                    <b>简介：</b>{{courseAuthDescription}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="twoFloor">
+        <!--播放盒-->
+        <video id="myVideo" v-if="currentPlayUrl!=''" :src="currentPlayUrl" class="video-js vjs-big-play-centered" width="660" height="400" controls autoplay preload="auto">
+
+        </video>
+
+        <!--播放列表-->
+        <div class="playList">
+            <div class="buttonList">
+                <button :id="item.c_s_sequence" :key="item.c_s_sequence" type="button" class="buttonInList btn btn-default" v-for="item in courseSection" @click="changeSection(item.c_s_sequence)">{{item.c_s_name}}</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="threeFloor">
+        <div class="abstractAndComment">
+            <div style="width:100%;font-weight: bold;font-size: 32px;margin: 24px 0px">课程介绍
+                <button v-if="isAddLearn" type="button" class="btn btn-success">加入学习空间</button>
+                <button v-else="isAddLearn" type="button" class="btn btn-default btn-lg active" disabled>已加入</button>
+            </div>
+
+
+            <div class="abstract">
+                {{courseAbstract}}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+<footer id="footer"></footer>
+
+
+<script>
+    $(function () {
+        //获得url后缀的课程id属性，请求后台数据
+        var c_id = location.search.substr(1).split("=")[1]
+        axios({
+            method:"get",
+            url:"course/"+c_id
+        }).then(respose =>{
+            play.courseId=respose.data.c_id;
+            play.courseName=respose.data.c_name;
+            play.courseAuthId=respose.data.user.u_id;
+            play.courseAuth=respose.data.user.u_name;
+            play.courseAuthIdentification=respose.data.user.identification;
+            play.courseAuthDescription=respose.data.user.description;
+            play.courseAbstract=respose.data.c_abstract;
+            play.courseDate=respose.data.c_date;
+            play.courseSectionNum=respose.data.courseSections.length;
+            play.courseSection=respose.data.courseSections;
+            //设置标题
+            $("title").text(play.courseName);
+            //课程url加载完成，currentPlaySequence为1，开始播放
+            play.changeSection(1)
+        })
+    })
+    const play = new Vue({
+        el:"#main",
+        data:{
+            courseId:"",
+            courseName:"",
+            courseAuthId:"",
+            courseAuth:"",
+            courseAuthIdentification:"",
+            courseAuthDescription:"",
+            courseAbstract:"",
+            courseDate:"",
+
+            isAddLearn:false,
+
+            currentPlaySequence:0,
+            currentPlayUrl:"",
+            courseSectionNum:"",
+            courseSection:[]
+        },
+        methods:{
+            //选择课程章节
+            changeSection(sequence){
+                if(this.currentPlaySequence!==sequence){
+                    for(let i=0;i<this.courseSectionNum;i++){
+                        if(this.courseSection[i].c_s_sequence===sequence) {
+                            this.currentPlayUrl=this.courseSection[i].url
+                            // var myVideo = videojs("myVideo");
+                            // myVideo.play();
+                            this.currentPlaySequence=sequence
+                            return
+                        }
+                    }
+                }
+
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzm.dao.AdminDao">
+
+
+    <!--根据管理员名找所有信息-->
+    <select id="findByUsername" resultType="admin" parameterType="java.lang.String">
+        select m_id,m_name,m_password,m_role from admin WHERE m_name=#{m_name}
+    </select>
+
+    <select id="findRoleByRoleId" resultType="adminRole" parameterType="java.lang.Integer">
+        select r_id,r_name,r_remark from admin_role WHERE r_id=#{r_id}
+    </select>
+
+    <select id="findAuthorityListByRoleId" resultType="adminAuthority" parameterType="java.lang.Integer">
+        select id,roleId,menuId from admin_authority WHERE roleId=#{r_id}
+    </select>
+
+    <select id="findMenuListById" resultType="adminMenu" parameterType="java.lang.Integer">
+        select id,parentId,name,url from admin_menu WHERE id=#{id}
+    </select>
+<!--修改管理员-->
+    <update id="updateAdmin" parameterType="admin">
+        update admin set m_name=#{m_name},m_password=#{m_password},m_role=#{m_role} where m_id=#{m_id}
+    </update>
+
+
+
+    <resultMap id="adminAddRole" type="admin">
+        <id property="m_id" column="m_id"></id>
+        <result property="m_name" column="m_name"></result>
+        <association property="adminRole" javaType="adminRole">
+            <id property="r_id" column="r_id"></id>
+            <result property="r_name" column="r_name"></result>
+            <result property="r_remark" column="r_remark"></result>
+        </association>
+    </resultMap>
+    <!--查询所有admin账户-->
+    <select id="findAll" resultMap="adminAddRole">
+        select a.m_id,a.m_name,ar.r_name,ar.r_remark from admin a LEFT JOIN admin_role ar on a.m_role=ar.r_id
+    </select>
+
+
+</mapper>
